@@ -249,6 +249,7 @@
 
       async function sendMsg() {
         console.log("Send message---> ");
+        console.log("liff.getContext().type--> ", liff.getContext().type);
         if (liff.getContext().type !== "none") {
           await liff.sendMessages([
             {
