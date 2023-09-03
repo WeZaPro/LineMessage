@@ -1,0 +1,365 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"
+    />
+    <title>My LIFF App</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <p id="os"><b>OS:</b></p>
+    <p id="language"><b>Language:</b></p>
+    <p id="version"><b>Version:</b></p>
+    <p id="isInClient"><b>isInClient:</b></p>
+    <p id="accessToken"><b>AccessToken:</b></p>
+    <img id="pictureUrl" />
+    <p id="userId"><b>userId:</b></p>
+    <p id="displayName"><b>displayName:</b></p>
+    <p id="statusMessage"><b>statusMessage:</b></p>
+    <p id="decodedIDToken"><b>email:</b></p>
+    <p id="type"><b>type:</b></p>
+    <p id="viewType"><b>viewType:</b></p>
+    <p id="utouId"><b>utouId:</b></p>
+    <p id="roomId"><b>roomId:</b></p>
+    <p id="groupId"><b>groupId:</b></p>
+    <p id="friendship"><b>isFriendship:</b></p>
+    <p id="scanCode"><b>Code:</b></p>
+    <p id="isLoggedIn"><b>isLoggedIn:</b></p>
+    <p id="universalLink1"><b>Universal Link:</b></p>
+    <p id="universalLink2"><b>Universal Link with Query params:</b></p>
+    <!-- <p><a href="liff/path/?param=9">Link to Path</a></p> -->
+    <p>
+      <a
+        href="
+    https://sampleliffa.herokuapp.com/path/?param=9"
+        >Link to Path</a
+      >
+    </p>
+
+    <button id="btnChat" onclick="chatRoom()">Chat Room</button>
+    <button id="btnMsg" onclick="sendMsg()">Send Message</button>
+    <button id="btnShare" onclick="shareMsg()">Share Target Picker</button>
+    <button onclick="openWindow()">Open Window</button>
+    <button id="btnScanCode" onclick="scanCode()">Scan Code</button>
+    <button id="btnLogOut" onclick="logOut()">Log Out</button>
+    <button id="btnClose" onclick="closed()">Close</button>
+
+    <script src="js/vconsole.min.js"></script>
+    <script>
+      var vConsole = new VConsole();
+      console.log("Hello World!");
+    </script>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+    <!-- firebase -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script> -->
+
+    <script>
+      async function createUniversalLink() {
+        const link1 = liff.permanentLink.createUrl();
+        document.getElementById("universalLink1").append(link1);
+        console.log("universallink---> " + link1);
+
+        liff.permanentLink.setExtraQueryParam("param=9");
+        const link2 = liff.permanentLink.createUrl();
+        document.getElementById("universalLink2").append(link2);
+
+        //test1
+        const checkLink1 = new URLSearchParams(link1);
+        console.log("universallink-param-test1 ---> " + checkLink1);
+
+        //**********TODO*************
+        // พอ Login ใหม่ จะดึงค่า param จาก url ไม่ได้ ใช้วิธี Save Cookie แล้ว เรียกมา Save
+        // กรณีคนเดิมที่ Login แล้ว แต่ไปกด link param ค่าอื่นหรือ Ads ตัวอื่นจะไม่สามารถดึง Cookie ใหม่(param ใหม่) ได้
+        // ถ้ากรณีนี้ให้ดึงค่า Param ใหม่จาก UniversalLink แทน เอาไป Save
+        // code->
+        // ถ้า  param จาก universallink  checkLink1 = true -> ให้ save ค่า param จาก universallink
+        // else -> save จากค่า cookie -> function -> get_cookie_by_name("ads_no")
+
+        //set value to database************************************************
+
+        //test2
+        // param value
+        const queryString = decodeURIComponent(window.location.search);
+        const paramed = new URLSearchParams(queryString);
+        const param_value = paramed.get("param");
+        console.log(
+          "universallink-param-test2 ---> param_value " + param_value
+        );
+
+        // cookie value
+        const cookiesed = get_cookie_by_name("ads_no");
+        console.log(
+          "get_cookie_by_name function ****** ---> cookiesed " + cookiesed
+        );
+
+        // userId value
+        const profile = await liff.getProfile();
+        const user_id = profile.userId;
+        const display_name = profile.displayName;
+        const picture_url = profile.pictureUrl;
+        // new ************
+        const Email_address = liff.getDecodedIDToken().email;
+
+        console.log("getUserProfile uid function ****** ---> " + user_id);
+        console.log(
+          "getUserProfile displayName function ****** ---> " + display_name
+        );
+        console.log(
+          "getUserProfile pictureUrl function ******---> " + picture_url
+        );
+        console.log(
+          "getUserProfile Email function ******---> " + Email_address
+        );
+
+        // Check universallink
+        // if (param_value) {
+        //   // ใช้ Universallink
+        //   console.log(
+        //     "CHECK LINK-CASE1 ======================> 1 param_value " +
+        //       param_value
+        //   );
+        //   saveDataFirebase(
+        //     param_value,
+        //     user_id,
+        //     display_name,
+        //     picture_url,
+        //     Email_address
+        //   );
+        // } else {
+        //   // ใช้ Cookie
+        //   console.log(
+        //     "CHECK LINK-CASE2 ======================> 2 cookiesed " + cookiesed
+        //   );
+        //   saveDataFirebase(
+        //     cookiesed,
+        //     user_id,
+        //     display_name,
+        //     picture_url,
+        //     Email_address
+        //   );
+        // }
+      }
+
+      // function saveDataFirebase(cL, uI, dN, pU, eM) {
+      //   console.log(
+      //     "Firebae function ****** --->XXXXXXXXX  Ads Number param_value " + cL
+      //   );
+      //   console.log("Firebae function ****** --->XXXXXXXXX user_id " + uI);
+      //   console.log("Firebae function ****** --->XXXXXXXXX display_name " + dN);
+      //   console.log("Firebae function ****** --->XXXXXXXXX picture_url " + pU);
+      //   console.log(
+      //     "Firebae function ****** --->XXXXXXXXX email address " + eM
+      //   );
+
+      //   //Firebase
+      //   const firebaseConfig = {
+      //     apiKey: "AIzaSyBE2OFahNQCeeVbCQRdUEWkaTbFEU_KETU",
+      //     authDomain: "linebot-94fa6.firebaseapp.com",
+      //     databaseURL: "https://linebot-94fa6.firebaseio.com",
+      //     projectId: "linebot-94fa6",
+      //     storageBucket: "linebot-94fa6.appspot.com",
+      //     messagingSenderId: "38340695168",
+      //     appId: "1:38340695168:web:b33f9ae2cc7491fe2a8265",
+      //     measurementId: "G-WY1Z65EDCV",
+      //   };
+
+      //   // Initialize Firebase
+      //   firebase.initializeApp(firebaseConfig);
+      //   firebase.analytics();
+
+      //   firebase
+      //     .database()
+      //     .ref(cL)
+      //     .child(uI)
+      //     .push()
+      //     .set({
+      //       //firebase.database().ref(eM).child(uI).push().set({
+
+      //       userId: uI,
+      //       displayName: dN,
+      //       adsId: cL,
+      //       pictureUrl: pU,
+      //       // new ******
+      //       eMail: eM,
+      //       dateTime: new Date()
+      //         .toISOString()
+      //         .replace("-", "/")
+      //         .split("T")[0]
+      //         .replace("-", "/"),
+      //     });
+      // }
+
+      async function shareMsg() {
+        await liff.shareTargetPicker([
+          {
+            type: "text",
+            text: "This message was sent by ShareTargetPicker",
+          },
+        ]);
+      }
+
+      function logOut() {
+        // liff.logout()
+        // window.location.reload()
+        alert("you want to log-out");
+        if (liff.isLoggedIn()) {
+          liff.logout();
+          liff.closeWindow();
+        }
+      }
+
+      function closed() {
+        liff.closeWindow();
+      }
+
+      async function scanCode() {
+        const result = await liff.scanCode();
+        document.getElementById("scanCode").append(result.value);
+      }
+
+      function openWindow() {
+        liff.openWindow({
+          url: "https://line.me",
+          external: true,
+        });
+      }
+
+      function chatRoom() {
+        //window.location = "https://line.me/ti/p/@136xbdjw"
+        window.location = "https://line.me/ti/p/@249ocxcw";
+      }
+
+      async function getFriendship() {
+        const friend = await liff.getFriendship();
+        document.getElementById("friendship").append(friend.friendFlag);
+        if (!friend.friendFlag) {
+          if (confirm("คุณยังไม่ได้เพิ่ม Bot เป็นเพื่อน จะเพิ่มเลยไหม?")) {
+            window.location = "https://line.me/R/ti/p/@840tbvfi";
+            // Todo save data ***** Get Cookie param
+          }
+        }
+        console.log("GET FRIEND SHIP-------> ");
+      }
+
+      async function sendMsg() {
+        console.log("Send message---> ");
+        if (liff.getContext().type !== "none") {
+          await liff.sendMessages([
+            {
+              type: "sticker",
+              stickerId: 1,
+              packageId: 1,
+            },
+          ]);
+          alert("Message sent");
+        }
+      }
+
+      function getContext() {
+        if (liff.getContext() != null) {
+          document.getElementById("type").append(liff.getContext().type);
+          document
+            .getElementById("viewType")
+            .append(liff.getContext().viewType);
+          document.getElementById("utouId").append(liff.getContext().utouId);
+          document.getElementById("roomId").append(liff.getContext().roomId);
+          document.getElementById("groupId").append(liff.getContext().groupId);
+          console.log("GET CONTEXT-------> ");
+        }
+      }
+
+      async function getUserProfile() {
+        const profile = await liff.getProfile();
+        document.getElementById("pictureUrl").src = profile.pictureUrl;
+        document.getElementById("userId").append(profile.userId);
+        document.getElementById("statusMessage").append(profile.statusMessage);
+        document.getElementById("displayName").append(profile.displayName);
+        document
+          .getElementById("decodedIDToken")
+          .append(liff.getDecodedIDToken().email);
+        console.log("GET PROFILE-------> ");
+      }
+
+      function getEnvironment() {
+        document.getElementById("os").append(liff.getOS());
+        document.getElementById("language").append(liff.getLanguage());
+        document.getElementById("version").append(liff.getVersion());
+        document.getElementById("accessToken").append(liff.getAccessToken());
+        document.getElementById("isInClient").append(liff.isInClient());
+        if (liff.isInClient()) {
+          document.getElementById("btnLogOut").style.display = "none";
+        } else {
+          document.getElementById("btnMsg").style.display = "none";
+          document.getElementById("btnScanCode").style.display = "none";
+          document.getElementById("btnClose").style.display = "none";
+        }
+        console.log("getEnvironment-------> ");
+      }
+
+      function getParam() {
+        // Query Params
+        const queryString = decodeURIComponent(window.location.search);
+        const params = new URLSearchParams(queryString);
+        //document.getElementById("param").append(params.get("param"));
+        const param_value = params.get("param");
+        console.log("GET PARAM-------> " + param_value);
+
+        // set cookie + name
+        setCookie(param_value);
+      }
+
+      // set cookies = "name"
+      function setCookie(cookied) {
+        //document.cookie =cookied
+        document.cookie = "ads_no=" + cookied;
+        console.log("SET COOKIE Name ads_no = -------> " + cookied);
+      }
+
+      // get cookies name = "name"
+      function get_cookie_by_name(name) {
+        var match = document.cookie.match(
+          new RegExp("(^| )" + name + "=([^;]+)")
+        );
+        if (match) {
+          console.log("Cookie Name = ads_no --->" + match[2]);
+          return match[2];
+        } else {
+          console.log("--something went wrong---");
+          return false;
+        }
+      }
+
+      async function main() {
+        console.log("MAIN START------->LIFF APP TEST 21-08-23 ");
+
+        liff.ready.then(() => {
+          document.getElementById("isLoggedIn").append(liff.isLoggedIn());
+          if (liff.isLoggedIn()) {
+            console.log("NOT LOGIN-------> ");
+            getEnvironment();
+            getUserProfile();
+            getContext();
+            getFriendship();
+            createUniversalLink();
+
+            get_cookie_by_name("ads_no");
+          } else {
+            console.log("TO LOGIN-------> ");
+            // get param value & set cookie name
+            getParam();
+            liff.login();
+          }
+        });
+        await liff.init({ liffId: "1657499945-YZJW8pVA" });
+      }
+      main();
+      // ถ้า Deploy error ให้ Code นี้  = git push heroku HEAD:master
+    </script>
+  </body>
+</html>
