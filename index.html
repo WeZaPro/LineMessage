@@ -249,16 +249,36 @@
 
       async function sendMsg() {
         console.log("Send message---> ");
-        console.log("liff.getContext().type--> ", liff.getContext().type);
-        if (liff.getContext().type !== "none") {
-          await liff.sendMessages([
-            {
-              type: "sticker",
-              stickerId: 1,
-              packageId: 1,
-            },
-          ]);
-          alert("Message sent");
+        // console.log("liff.getContext().type--> ", liff.getContext().type);
+        // if (liff.getContext().type !== "none") {
+        //   await liff.sendMessages([
+        //     {
+        //       type: "sticker",
+        //       stickerId: 1,
+        //       packageId: 1,
+        //     },
+        //   ]);
+        //   alert("Message sent");
+        // }
+
+        if (!liff.isInClient()) {
+          window.alert(
+            "This button is unavailable as LIFF is currently being opened in an external browser."
+          );
+        } else {
+          liff
+            .sendMessages([
+              {
+                type: "text",
+                text: "Hello, World!",
+              },
+            ])
+            .then(() => {
+              window.alert("Message sent");
+            })
+            .catch((error) => {
+              window.alert("Error sending message: " + error);
+            });
         }
       }
 
