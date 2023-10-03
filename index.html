@@ -248,7 +248,8 @@
       }
 
       async function sendMsg() {
-        console.log("Send message---> ");
+        const profile = await liff.getProfile();
+        console.log("userId---> "+profile.userId);
         // console.log("liff.getContext().type--> ", liff.getContext().type);
         // if (liff.getContext().type !== "none") {
         //   await liff.sendMessages([
@@ -275,7 +276,7 @@
               
             ])
             .then(() => {
-              window.alert(`Message sent Register $userId`);
+              window.alert(`Message sent Register `);
             })
             .catch((error) => {
               window.alert("Error sending message: " + error);
