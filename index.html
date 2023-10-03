@@ -272,13 +272,10 @@
                 type: "text",
                 text: "Register",
               },
-              {
-                type: "text",
-                text: $userId,
-              },
+              
             ])
             .then(() => {
-              window.alert("Message sent Register");
+              window.alert(`Message sent Register $userId`);
             })
             .catch((error) => {
               window.alert("Error sending message: " + error);
