@@ -271,7 +271,7 @@
             .sendMessages([
               {
                 type: "text",
-                text: `Register}`,
+                text: `Register/${profile.displayName}`,
               },
               // {
               //   type: "text",
@@ -284,7 +284,7 @@
               
             ])
             .then(() => {
-              window.alert(`Message sent Register `);
+              window.alert(`Message sent Register `+profile.userId);
             })
             .catch((error) => {
               window.alert("Error sending message: " + error);
