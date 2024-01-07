@@ -102,6 +102,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           "universallink-param-test2 ---> param_value " + param_value
         );
 
+        //test qryString
+        const queryString = window.location.search;
+        console.log("queryString---->",queryString);
+
         // cookie value
         const cookiesed = get_cookie_by_name("ads_no");
         console.log(
