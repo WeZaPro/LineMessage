@@ -396,6 +396,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             get_cookie_by_name("ads_no");
           } else {
             console.log("TO LOGIN-------> ");
+
+            const getQueryString = window.location.search;
+            console.log("getQueryString--->",getQueryString);
+            
             // get param value & set cookie name
             getParam();
             liff.login();
