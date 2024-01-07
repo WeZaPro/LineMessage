@@ -97,10 +97,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         // param value
         const queryString = decodeURIComponent(window.location.search);
         const paramed = new URLSearchParams(queryString);
-        const param_value = paramed.get("param");
-        console.log(
-          "universallink-param-test2 ---> param_value " + param_value
-        );
+        const param_value = paramed.get("key");
+        console.log("param_value---->",param_value);
+        // console.log(
+        //   "universallink-param-test2 ---> param_value " + param_value
+        // );
 
         //test qryString
         const queryString = window.location.search;
@@ -397,8 +398,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           } else {
             console.log("TO LOGIN-------> ");
 
-            const getQueryString = window.location.search;
-            console.log("getQueryString--->",getQueryString);
+            
             
             // get param value & set cookie name
             getParam();
